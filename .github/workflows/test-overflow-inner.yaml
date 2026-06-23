@@ -1,0 +1,20 @@
+name: Test Inner
+on:
+  workflow_call:
+    outputs:
+      huge:
+        value: ${{ jobs.generate.outputs.huge }}
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    outputs:
+      huge: ${{ steps.gen.outputs.huge }}
+    steps:
+      - id: gen
+        run: |
+          {
+            echo "huge<<EOF"
+            python3 -c "print('x' * 1100000)"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
